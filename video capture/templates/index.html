@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Live streaming</title>
+   
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>Live streaming</h1>
+
+    <div>
+        <button id="toggle-camera-btn" onclick="toggleCamera()">Toggle Camera</button>
+        <button id="fullscreen-btn" onclick="toggleFullscreen()" style="display:none;">Fullscreen</button>
+        <button id="exit-fullscreen-btn" onclick="exitFullscreen()" style="display:none;">Exit Fullscreen</button>
+        <button id="capture-screen-btn" onclick="captureScreen()">Capture Screen</button>
+    </div>
+    
+    <div id="screen-feed">
+    <div id="camera-feed">
+        <img margin="50px" id="video-feed" src="{{ url_for('video') }}" width="50%">
+        <video id="screen-video" width="100%" height="100%" autoplay></video>
+    </div>
+    </div>
+
+   
+
+    
+
+    <script>
+
+      document.getElementById("video-feed").addEventListener("dblclick", function() {
+        toggleFullscreen(); 
+    });
+
+    document.getElementById("video-feed").addEventListener("dblclick", function() {
+      exitFullscreen(); 
+  });
+        function toggleCamera() {
+            var videoFeed = document.getElementById("video-feed");
+            var toggleCameraBtn = document.getElementById("toggle-camera-btn");
+            var fullscreenBtn = document.getElementById("fullscreen-btn");
+            var exitFullscreenBtn = document.getElementById("exit-fullscreen-btn");
+          
+            if (videoFeed.style.display === "none") {
+              videoFeed.style.display = "block";
+              toggleCameraBtn.innerText = "Hide Camera";
+              fullscreenBtn.style.display = "block";
+              
+            } else {
+              videoFeed.style.display = "none";
+              toggleCameraBtn.innerText = "show Camera";
+              fullscreenBtn.style.display = "none";
+              exitFullscreenBtn.style.display = "none";
+             
+            }
+
+
+           
+          }
+          
+          function toggleFullscreen() {
+            var videoFeed = document.getElementById("video-feed");
+            var fullscreenBtn = document.getElementById("fullscreen-btn");
+            var exitFullscreenBtn = document.getElementById("exit-fullscreen-btn");
+          
+            if (videoFeed.requestFullscreen) {
+              videoFeed.requestFullscreen();
+              fullscreenBtn.style.display = "none";
+              exitFullscreenBtn.style.display = "block";
+            } else if (videoFeed.webkitRequestFullscreen) {
+              videoFeed.webkitRequestFullscreen();
+              fullscreenBtn.style.display = "none";
+              exitFullscreenBtn.style.display = "block";
+            } else if (videoFeed.msRequestFullscreen) {
+              videoFeed.msRequestFullscreen();
+              fullscreenBtn.style.display = "none";
+              exitFullscreenBtn.style.display = "block";
+            }
+          }
+          
+          function exitFullscreen() {
+            var videoFeed = document.getElementById("video-feed");
+            var fullscreenBtn = document.getElementById("fullscreen-btn");
+            var exitFullscreenBtn = document.getElementById("exit-fullscreen-btn");
+          
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+              fullscreenBtn.style.display = "block";
+              exitFullscreenBtn.style.display = "none";
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
+              fullscreenBtn.style.display = "block";
+              exitFullscreenBtn.style.display = "none";
+            } else if (document.msExitFullscreen) {
+              document.msExitFullscreen();
+              fullscreenBtn.style.display = "block";
+              exitFullscreenBtn.style.display = "none";
+            }
+          }
+
+          function captureScreen() {
+            navigator.mediaDevices.getDisplayMedia({ video: true })
+              .then(function(stream) {
+                var screenVideo = document.getElementById("screen-video");
+                screenVideo.srcObject = stream;
+              })
+              .catch(function(error) {
+                console.log("Error capturing screen: " + error);
+              });
+          }
+       
+    
+    </script>
+
+</body>
+
+</html>
